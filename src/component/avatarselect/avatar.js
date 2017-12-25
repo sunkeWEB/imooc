@@ -1,12 +1,16 @@
 import React from 'react';
-import {Grid,List} from 'antd-mobile';
+import {Grid, List} from 'antd-mobile';
+import PropTypes from 'prop-types';
 
 class AvatarSelect extends React.Component {
-    constructor (props) {
+    static propTypes = {
+        selectAvatar:PropTypes.func
+    };
+    constructor(props) {
         super(props);
         this.state = {
-            text:'',
-            icon:''
+            text: '',
+            icon: ''
         };
     }
 
@@ -16,24 +20,24 @@ class AvatarSelect extends React.Component {
             text: v
         }));
         const avatarimg = {
-            width:20,
-            marginLeft:8,
-            verticalAlign:'text-bottom'
+            width: 20,
+            marginLeft: 8,
+            verticalAlign: 'text-bottom'
         };
         const avatarHeader = this.state.icon ? (<div>
-            <span style={{fontSize:16}}>已经选择的头像</span>
+            <span style={{fontSize: 16}}>已经选择的头像</span>
             <img style={avatarimg} src={this.state.icon} alt="头像"/>
-        </div>) : (<div style={{fontSize:16}}>请选择你的头像</div>);
+        </div>) : (<div style={{fontSize: 16}}>请选择你的头像</div>);
         return (
             <div>
-                <List renderHeader={()=>avatarHeader}>
+                <List renderHeader={() => avatarHeader}>
                     <Grid
                         data={avatarList}
                         activeStyle={false}
                         columnNum={4} hasLine={true}
-                        onClick={ e => {
+                        onClick={e => {
                             this.setState({
-                                icon:e.icon
+                                icon: e.icon
                             });
                             this.props.selectAvatar(e.text);
                         }}

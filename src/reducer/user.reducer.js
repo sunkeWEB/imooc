@@ -1,12 +1,10 @@
 import axios from 'axios';
 import {getRedirectPath} from './../utli';
 
-const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const AUTH_SUCCESS = 'AUTH_SUCCESS';
 const ERR_MSG = 'ERR_MSG';
 const USER_DATA = 'USER_DATA';
 const init = {
-    isAuth: false,
     msg: '',
     type: '',
     redirecTo: '' // 登录成功或者注册成功跳转地址  有多种可能
@@ -14,10 +12,8 @@ const init = {
 
 export function user(state = init, action) {
     switch (action.type) {
-        case REGISTER_SUCCESS:
-            return {...state, isAuth: true, msg: '', redirecTo:getRedirectPath(action.payload), ...action.payload};
-        case LOGIN_SUCCESS:
-            return {...state, isAuth: true, msg: '', redirecTo:getRedirectPath(action.payload), ...action.payload};
+        case AUTH_SUCCESS:
+            return {...state,msg: '', redirecTo:getRedirectPath(action.payload), ...action.payload};
         case USER_DATA:
             return {...state, ...action.payload};
         case ERR_MSG:
@@ -31,8 +27,8 @@ function errorMsg(msg) {
     return {msg, type: ERR_MSG};
 }
 
-function registerSuccess(data) {  // 注册成功
-    return {type: REGISTER_SUCCESS, payload: data}
+function authSuccess(data) {  // 注册成功
+    return {type: AUTH_SUCCESS, payload: data}
 }
 
 export function register({user, pwd, type, repeatpwd}) {
@@ -45,16 +41,12 @@ export function register({user, pwd, type, repeatpwd}) {
     return dispatch => {
         axios.post('/user/register', {user, pwd, type}).then((res) => {
             if (res.status === 200 && res.data.code === 0) {
-                dispatch(registerSuccess(res.data.data));
+                dispatch(authSuccess(res.data.data));
             } else {
                 dispatch(errorMsg(res.data.msg));
             }
         })
     }
-}
-
-function loginSuccess(data) {
-  return {type:LOGIN_SUCCESS,payload:data}
 }
 
 export function login({user, pwd}) {
@@ -67,7 +59,7 @@ export function login({user, pwd}) {
             pwd
         }).then((res)=>{
             if (res.status === 200 && res.data.code === 0) {
-                dispatch(loginSuccess(res.data.data));
+                dispatch(authSuccess(res.data.data));
             }else{
                 dispatch(errorMsg(res.data.msg));
             }
@@ -79,6 +71,14 @@ export function loadDate(userinfo) {
     return {type:USER_DATA,payload:userinfo}
 }
 
-export function update() {
-    
+export function update (data) {
+    return dispatch => {
+        axios.post('/user/update',data).then(res=>{
+            if (res.status===200&&res.data.code===0) {
+                dispatch(authSuccess(res.data.data));
+            }else{
+                return errorMsg("");
+            }
+        })
+    }
 }

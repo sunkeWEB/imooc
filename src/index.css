@@ -1,3 +1,17 @@
 .err-msg{
     color: #ff5500;
 }
+
+.fixd-header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.navtar-div{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
