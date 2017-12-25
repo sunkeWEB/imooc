@@ -7,6 +7,7 @@ import UserCard from './../usercard/usercard';
     getUserLists
 })
 class Genius extends Component {
+
     constructor(props) {
         super(props);
         this.state = {

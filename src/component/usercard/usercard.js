@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class UserCard extends React.Component {
     static propTypes = {
-        userlist:PropTypes.array
+        userlist:PropTypes.array.isRequired
     };
 
     constructor(props) {
@@ -26,10 +26,13 @@ class UserCard extends React.Component {
                                 />
                                 <Card.Body>
                                     {v.desc.split('\n').map(v => (
-                                        <span key={Math.random() + v}>{v}</span>
+                                        <p key={Math.random() + v} style={{paddingTop:5}}>{v}</p>
                                     ))}
                                 </Card.Body>
-                                <Card.Footer content={"职位薪资" + v.money}/>
+                                {v.type==='boss' ?
+                                    <Card.Footer content={"职位薪资" + v.money} extra={"公司名称 "+v.company}/> :
+                                    <Card.Footer content={"期望薪资" + v.money}/>
+                                }
                             </Card>
                         ) : null
                     ))}

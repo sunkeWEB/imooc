@@ -5,14 +5,10 @@ import {connect} from 'react-redux';
 import NavLink from './../navlink/navlink';
 import Boss from './../../component/boss/boss';
 import Genius from './../../component/genius/genius';
+import User from './../../component/user/user';
 
 function Msg() {
-    console.log("asa");
     return <h3>消息列表</h3>
-}
-
-function User() {
-    return <h3>个人中心</h3>
 }
 
 @connect(state => state)

@@ -4,6 +4,7 @@ import {getRedirectPath} from './../utli';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
 const ERR_MSG = 'ERR_MSG';
 const USER_DATA = 'USER_DATA';
+const LOGOUT = 'LOGOUT';
 const init = {
     msg: '',
     type: '',
@@ -13,11 +14,13 @@ const init = {
 export function user(state = init, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return {...state,msg: '', redirecTo:getRedirectPath(action.payload), ...action.payload};
+            return {...state, msg: '', redirecTo: getRedirectPath(action.payload), ...action.payload};
         case USER_DATA:
             return {...state, ...action.payload};
         case ERR_MSG:
             return {...state, isAuth: false, msg: action.msg};
+        case LOGOUT:
+            return {...init, redirecTo: '/login'};
         default:
             return state;
     }
@@ -54,13 +57,13 @@ export function login({user, pwd}) {
         return errorMsg("用户名或密码不能为空");
     }
     return dispatch => {
-        axios.post('/user/login',{
+        axios.post('/user/login', {
             user,
             pwd
-        }).then((res)=>{
+        }).then((res) => {
             if (res.status === 200 && res.data.code === 0) {
                 dispatch(authSuccess(res.data.data));
-            }else{
+            } else {
                 dispatch(errorMsg(res.data.msg));
             }
         });
@@ -68,17 +71,21 @@ export function login({user, pwd}) {
 }
 
 export function loadDate(userinfo) {
-    return {type:USER_DATA,payload:userinfo}
+    return {type: USER_DATA, payload: userinfo}
 }
 
-export function update (data) {
+export function update(data) {
     return dispatch => {
-        axios.post('/user/update',data).then(res=>{
-            if (res.status===200&&res.data.code===0) {
+        axios.post('/user/update', data).then(res => {
+            if (res.status === 200 && res.data.code === 0) {
                 dispatch(authSuccess(res.data.data));
-            }else{
+            } else {
                 return errorMsg("");
             }
         })
     }
+}
+
+export function logouSubmit() {
+    return {type: LOGOUT}
 }
