@@ -2,19 +2,27 @@ import React, {Component} from "react";
 import {Switch, Route} from 'react-router-dom';
 import {NavBar} from 'antd-mobile';
 import {connect} from 'react-redux';
+import {getMsgList, recvMsg} from './../../reducer/chat.redux';
 import NavLink from './../navlink/navlink';
 import Boss from './../../component/boss/boss';
 import Genius from './../../component/genius/genius';
 import User from './../../component/user/user';
+import Msg from './../../component/msg/msg';
 
-function Msg() {
-    return <h3>消息列表</h3>
-}
-
-@connect(state => state)
+@connect(state => state, {
+    getMsgList, recvMsg
+})
 class DashBorad extends Component {
+
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        if (!this.props.chat.chatmsg.length) {
+            this.props.getMsgList();
+            this.props.recvMsg();
+        }
     }
 
     render() {

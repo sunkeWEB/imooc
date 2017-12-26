@@ -3,6 +3,7 @@ const router = express.Router();
 const utility = require('utility');
 const model = require('./db');
 const Users = model.getModel('user');
+const Chats = model.getModel('chat');
 
 router.get('/list', (req, res) => {
     let {type} = req.query;
@@ -125,6 +126,28 @@ router.post('/update', (req, res) => {
     });
 });
 
+router.get('/getmsglist',(req,res)=>{
+
+    const {userid} = req.cookies;
+
+
+    Users.find({},(err,userdoc)=>{
+        let users = {};
+        userdoc.forEach(v => {
+            users[v._id] = {name: v.user, avatar: v.avatar};
+        });
+        Chats.find({'$or':[{from:userid},{to:userid}]},(err,doc)=>{
+            if (!err) {
+                return res.json({
+                    code:0,
+                    msg:"获取聊天信息成功",
+                    msgs:doc,
+                    users:users
+                });
+            }
+        });
+    });
+});
 
 function mdPwd(value) {
     let solt = "(*)397633183@js(@)jquery.&(*)";

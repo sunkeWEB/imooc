@@ -15,6 +15,7 @@
     "express": "^4.16.2",
     "mongoose": "^4.13.7",
     "nodemon": "^1.14.1",
+    "socket.io": "^2.0.4",
     "utility": "^1.13.1"
   }
 }

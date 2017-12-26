@@ -14,7 +14,7 @@ import './index.css';
 import BossInfo from "./container/bossinfo/bossinfo";
 import GeniusInfo from "./container/geniusinfo/geniusinfo";
 import DashBorad from "./component/dashborad/dashborad";
-
+import Chat from "./component/chat/chat";
 
 const store = createStore(reducer, compose(
     applyMiddleware(thunk),
@@ -31,7 +31,8 @@ ReactDom.render((
                     <Route path="/geniusinfo" component={GeniusInfo}/>
                     <Route path="/login" component={Login}/>
                     <Route path="/register" component={Register}/>
-                    <Route  component={DashBorad} />
+                    <Route path="/chat/:user" component={Chat}/>
+                    <Route component={DashBorad}/>
                 </Switch>
             </div>
         </BrowserRouter>

@@ -2,15 +2,19 @@ import React, {Component} from "react";
 import PropTypes from 'prop-types';
 import {TabBar} from 'antd-mobile';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 @withRouter
+@connect(state=>state.chat)
 class NavLink extends Component {
     constructor(props) {
         super(props);
     }
+
     static propTypes = {
         navlist: PropTypes.array
     };
+
 
     render() {
         const TabBarItem = TabBar.Item;
@@ -21,12 +25,13 @@ class NavLink extends Component {
                 <TabBar>
                     {navlist.map(v => (
                         <TabBarItem
+                            badge={v.path === '/msg' ? this.props.unread:null}
                             key={v.text}
                             title={v.text}
                             icon={{uri: require(`./image/${v.icon}.png`)}}
                             selectedIcon={{uri: require(`./image/${v.icon}-active.png`)}}
-                            selected={v.path===pathname}
-                            onPress={()=>{
+                            selected={v.path === pathname}
+                            onPress={() => {
                                 this.props.history.push(v.path);
                             }}
                         />
