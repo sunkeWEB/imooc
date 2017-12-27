@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {List, InputItem, NavBar, Grid} from 'antd-mobile';
 import {connect} from 'react-redux';
-import {sendMsg, getMsgList, recvMsg} from './../../reducer/chat.redux';
+import QueueAnim from 'rc-queue-anim';
+import {sendMsg, getMsgList, recvMsg,msgRead} from './../../reducer/chat.redux';
 import {getChatId} from './../../utli';
 
 const Item = List.Item;
 
 @connect(state => state, {
-    sendMsg, getMsgList, recvMsg
+    sendMsg, getMsgList, recvMsg,msgRead
 })
 class Chat extends Component {
     constructor(props) {
@@ -49,7 +50,12 @@ class Chat extends Component {
         }
         setTimeout(() => {
             window.dispatchEvent(new Event('resize'));
-        }, 0)
+        }, 0);
+    }
+
+    componentWillUnmount () {
+        const to = this.props.match.params.user;
+        this.props.msgRead(to);
     }
 
     render() {
@@ -68,26 +74,28 @@ class Chat extends Component {
             <div id="chat-page">
                 <NavBar onLeftClick={() => this.handleClick()} mode="dark" leftContent="返回"
                         className="navbarList">{users[userid].name}</NavBar>
-                <div className="msgListItem">
-                    {chatmsg.map(v => {
-                        const avatar = require(`./../img/${users[v.from].avatar}.png`);
-                        return v.from === userid ? (
-                            <Item key={Math.random() + v._id} thumb={avatar}>{v.content}</Item>
-                        ) : (
-                            <Item key={Math.random() + v._id} className='chat-me'
-                                  extra={<img src={avatar}/>}>{v.content}</Item>
-                        )
-                    })}
-                </div>
+                    <div className="msgListItem">
+                        {chatmsg.map(v => {
+                            const avatar = require(`./../img/${users[v.from].avatar}.png`);
+                            return v.from === userid ? (
+                                <Item key={Math.random() + v._id} thumb={avatar}>{v.content}</Item>
+                            ) : (
+                                <Item key={Math.random() + v._id} className='chat-me'
+                                      extra={<img src={avatar} alt="" />}>{v.content}</Item>
+                            )
+                        })}
+                    </div>
                 <div className="stick-footer">
                     <List>
                         <InputItem
                             placeholder="请输入"
                             value={this.state.text}
                             onChange={v => this.setState({text: v})}
+
                             extra={
                                 <div>
                                     <span
+                                        role="img"
                                         style={{marginRight: 10}}
                                         onClick={() => this.showem()}
                                     >😀</span>

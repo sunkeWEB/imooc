@@ -11,6 +11,7 @@ class UserCard extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     handelClick(v) {

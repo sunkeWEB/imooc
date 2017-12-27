@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 class NavLink extends Component {
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     static propTypes = {

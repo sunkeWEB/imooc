@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {Result, WingBlank, WhiteSpace, List, Button, Modal, Toast} from 'antd-mobile';
+import {Result, WingBlank, WhiteSpace, List, Button, Modal} from 'antd-mobile';
 import browserCookies from 'browser-cookies';
 import {logouSubmit} from './../../reducer/user.reducer';
 
@@ -11,6 +11,7 @@ import {logouSubmit} from './../../reducer/user.reducer';
 class User extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
     }
 
     logout() {
@@ -29,13 +30,13 @@ class User extends React.Component {
                 <WingBlank>
                     <WhiteSpace/>
                     <Result
-                        img={<img src={require(`../img/${props.avatar}.png`)} style={{width: 50}}/>}
+                        img={<img src={require(`../img/${props.avatar}.png`)} style={{width: 50}} alt="" />}
                         title={props.title}
                         message={props.type === 'boss' ? props.company : null}
                     />
                     <WhiteSpace/>
                     <List renderHeader="个人介绍">
-                        <Item multipleLine={true}>
+                        <Item multipleLine={true} >
                             {props.title}
                             {props.desc.split('\n').map(v => (
                                 <Brief key={v + Math.random()}>{v}</Brief>

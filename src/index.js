@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import {createStore, applyMiddleware, compose} from 'redux'; //applyMiddleware 处理中间件
-import {BrowserRouter, Route, Link, Redirect, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import thunk from 'redux-thunk';
 import reducer from './reducer';
 import {Provider} from 'react-redux';

@@ -9,10 +9,10 @@ router.get('/list', (req, res) => {
     let {type} = req.query;
     if (!type) {
         res.json({
-            code:1,
-            msg:''
+            code: 1,
+            msg: ''
         });
-    }else{
+    } else {
         Users.find({type}, (err, doc) => {
             res.json({
                 code: 0,
@@ -32,12 +32,14 @@ router.get('/info', (req, res) => {
             });
         }
         if (doc) {
+            console.log("1");
             return res.json({
                 code: 0,
                 msg: '获取用户数据成功',
                 data: doc
             });
         } else {
+            console.log("2");
             return res.json({
                 code: 1,
                 msg: '没找到用户相关数据'
@@ -126,27 +128,48 @@ router.post('/update', (req, res) => {
     });
 });
 
-router.get('/getmsglist',(req,res)=>{
+router.get('/getmsglist', (req, res) => {
 
     const {userid} = req.cookies;
 
 
-    Users.find({},(err,userdoc)=>{
+    Users.find({}, (err, userdoc) => {
         let users = {};
         userdoc.forEach(v => {
             users[v._id] = {name: v.user, avatar: v.avatar};
         });
-        Chats.find({'$or':[{from:userid},{to:userid}]},(err,doc)=>{
+        Chats.find({'$or': [{from: userid}, {to: userid}]}, (err, doc) => {
             if (!err) {
                 return res.json({
-                    code:0,
-                    msg:"获取聊天信息成功",
-                    msgs:doc,
-                    users:users
+                    code: 0,
+                    msg: "获取聊天信息成功",
+                    msgs: doc,
+                    users: users
                 });
             }
         });
     });
+});
+
+router.post('/readmsg', (req, res) => {
+    const {userid} = req.cookies;
+    const {from} = req.body;
+    console
+    Chats.update({from, to: userid}, {$set: {read: true}}, {multi: true}, (err, doc) => {
+        if (err) {
+            res.json({
+                code: 1,
+                msg: "系统错误"
+            });
+        } else {
+            console.log(doc);
+            res.json({
+                code: 0,
+                msg: "success",
+                num: doc.nModified
+            });
+        }
+    })
 });
 
 function mdPwd(value) {
@@ -156,3 +179,4 @@ function mdPwd(value) {
 }
 
 module.exports = router;
+
